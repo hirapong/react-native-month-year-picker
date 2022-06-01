@@ -3,7 +3,7 @@
 //  RNMonthPicker
 //
 //  Created by Gustavo Paris on 22/04/2020.
-//  Copyright © 2020 Facebook. All rights reserved.
+//  Copyright 息 2020 Facebook. All rights reserved.
 //
 #import "RNMonthPicker.h"
 
@@ -89,8 +89,8 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 
 - (void)setSelectedRows:(BOOL)animated {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self selectRow:selectedMonthRow inComponent:0 animated:animated];
-        [self selectRow:selectedYearRow inComponent:1 animated:animated];
+        [self selectRow:selectedMonthRow inComponent:1 animated:animated];
+        [self selectRow:selectedYearRow inComponent:0 animated:animated];
     });
 }
 
@@ -103,9 +103,9 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 // number of rows
 - (NSInteger)pickerView:(nonnull UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
     switch (component) {
-        case 0:
-            return DEFAULT_MONTH_SIZE;
         case 1:
+            return DEFAULT_MONTH_SIZE;
+        case 0:
             return (DEFAULT_YEAR_SIZE * 2) + 1;
             break;
         default:
@@ -117,13 +117,13 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 // row titles
 - (NSString *)pickerView:(nonnull UIPickerView *) pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
     switch (component) {
-        case 0: {
+        case 1: {
             NSDateComponents *comps = [[NSDateComponents alloc] init];
             [comps setMonth: row % 12];
             return [NSString stringWithFormat:@"%@", [df stringFromDate:[gregorian dateFromComponents:comps]]];
         }
-        case 1:
-            return [NSString stringWithFormat:@"%@", years[row]];
+        case 0:
+            return [[NSString stringWithFormat:@"%@", years[row]] stringByAppendingString:@"年"];
         default:
             return nil;
     }
@@ -155,10 +155,10 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 - (void)pickerView:(__unused UIPickerView *)pickerView
       didSelectRow:(NSInteger)row inComponent:(__unused NSInteger)component {
     switch (component) {
-        case 0:
+        case 1:
             [self getSelectedMonthRow:row];
             break;
-        case 1:
+        case 0:
             [self getSelectedYearRow:row];
             [self getSelectedMonthRow:selectedMonthRow];
             break;
