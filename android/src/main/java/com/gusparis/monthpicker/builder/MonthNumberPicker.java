@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import java.text.DateFormatSymbols;
 
 class MonthNumberPicker extends MonthYearNumberPicker {
-  private static final Integer DEFAULT_MONTH_SIZE = 3000;
+  private static final Integer DEFAULT_MONTH_SIZE = 12;
 
   @Override
   MonthNumberPicker onScrollListener(MonthYearScrollListener scrollListener) {
@@ -19,10 +19,12 @@ class MonthNumberPicker extends MonthYearNumberPicker {
     final DateFormatSymbols dfs = new DateFormatSymbols(props.locale());
 
     monthPicker.setMinValue(0);
-    monthPicker.setMaxValue(DEFAULT_MONTH_SIZE);
+    //monthPicker.setMaxValue(DEFAULT_MONTH_SIZE);
+    monthPicker.setMaxValue(11);
     monthPicker.setFormatter(MonthFormatter.getMonthFormatter(props.mode(), dfs));
     monthPicker.setWrapSelectorWheel(false);
-    monthPicker.setValue((DEFAULT_MONTH_SIZE / 2) + props.value().getMonth());
+    //monthPicker.setValue((DEFAULT_MONTH_SIZE / 2) + props.value().getMonth());
+    monthPicker.setValue(props.value().getMonth());
     // Fix for Formatter blank initial rendering
     try {
       final Method method = monthPicker.getClass().getDeclaredMethod("changeValueByOne", boolean.class);
@@ -45,11 +47,13 @@ class MonthNumberPicker extends MonthYearNumberPicker {
     if (props.minimumValue() != null &&
         year == props.minimumValue().getYear() &&
         month < props.minimumValue().getMonth()) {
-      value = row + props.minimumValue().getMonth() - month;
+      //value = row + props.minimumValue().getMonth() - month;
+      value = props.minimumValue().getMonth();
     } else if (props.maximumValue() != null &&
         year == props.maximumValue().getYear() &&
         month > props.maximumValue().getMonth()) {
-      value = row + props.maximumValue().getMonth() - month;
+      //value = row + props.maximumValue().getMonth() - month;
+      value = props.maximumValue().getMonth();
     }
     monthPicker.setValue(value);
   }
